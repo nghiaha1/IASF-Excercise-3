@@ -273,7 +273,7 @@
             }, (error, result) => {
                 if (!error && result && result.event === "success") {
                     console.log('Done! Here is the image info: ', result.info.secure_url);
-                    document.forms['product-form']['thumbnail'].value = result.info.secure_url;
+                    document.forms['create-product-form']['thumbnail'].value = result.info.secure_url;
                     document.getElementById('preview-image').src = result.info.secure_url;
                     document.getElementById('preview-image').style.display = "block";
                 }
@@ -295,6 +295,7 @@
             loadData();
             handleSubmit();
         })
+
         function handleSubmit() {
             var btnSubmit = document.forms['create-product-form']['btn-submit'];
             var txtName = document.forms['create-product-form']['name'];

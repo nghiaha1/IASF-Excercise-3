@@ -267,8 +267,9 @@
                                                 <th>Price</th>
                                                 <th>Manufacturer</th>
                                                 <th>Thumbnail</th>
-                                                <th>Status</th>
-
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody id="list-product">
@@ -284,7 +285,9 @@
                                                 <th>Price</th>
                                                 <th>Manufacturer</th>
                                                 <th>Thumbnail</th>
-                                                <th>Status</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -360,6 +363,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            loadData();
+        })
+
+        function loadData() {
             var xmlHttpRequest = new XMLHttpRequest();
             xmlHttpRequest.onreadystatechange = function () {
                 if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
@@ -378,7 +385,9 @@
                                             <td> 
                                                 <img src="${element.thumbnail}" alt="${element.name}" width="150px">  
                                             </td>
-                                            <td> ${element.deleted} </td>
+                                            <td> <a href="/pages/products/detail.html?id=${element.id}" > Detail </td>
+                                            <td> <a href="/pages/products/edit.html?id=${element.id}" > Edit </td>
+                                            <td> <a data-id="${element.id}" href="/pages/products/delete.html" class="btn-delete"> Delete </td>
                                         </tr>`;
                     }
                     console.log(contentText);
@@ -389,10 +398,37 @@
                     console.log(jsonResult);
                 }
             }
-            xmlHttpRequest.open('GET', 'https://hacodern-api.herokuapp.com/api/v1/products', true)
+            xmlHttpRequest.open('GET', 'https://hacodern-api.herokuapp.com/api/v1/products', false)
             xmlHttpRequest.send();
-        })
+        }
+
+        function handleDeleteClick() {
+            var listBtnDelete = document.querySelector('.btn-delete');
+            for (let i = 0; i < listBtnDelete.length; i++) {
+                const element = listBtnDelete[i];
+                element.onclick = function(e) {
+                    e.preventDefault();
+                    if (confirm('Are you sure?')) {
+                        var id = this.getAttribute('data-id');
+                        handleDeleteById(id);
+                    }
+                }
+            }
+        }
+
+        function handleDeleteById(id) {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.onreadystatechange = function() {
+                if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+                    alert('Action success!');
+                    window.location.reload();
+                }
+            }
+            xmlHttpRequest.open('DELETE', `https://hacodern-api.herokuapp.com/api/v1/products`, false);
+            xmlHttpRequest.send();
+        }
     </script>
+
 </body>
 
 </html>
